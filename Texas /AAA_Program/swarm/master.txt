@@ -1,0 +1,112 @@
+#include <SPI.h>
+#include <AIR430BoostETSI.h>
+#define IDENTITY 0x01
+
+unsigned char txData[3] = { IDENTITY, '0', '\0' };
+
+void setup()
+{ 
+  /* Motor Pin Initialization */
+  pinMode(54,OUTPUT);
+  pinMode(70,OUTPUT);
+  pinMode(32,OUTPUT);
+  pinMode(31,OUTPUT);
+  pinMode(55,OUTPUT);
+  pinMode(71,OUTPUT);
+  Radio.begin(IDENTITY, CHANNEL_1, POWER_MAX);
+}
+void loop()
+{
+  Forward(25,25);
+  txData[1]='A';
+  tx1(); tx2(); tx3();
+  delay(2500);
+  Forward(0,0);
+
+  Right(25,25);
+  txData[1]='B'; 
+  tx1(); tx2(); tx3();
+  delay(2500);
+  Forward(0,0);
+
+  Reverse(25,25);
+  txData[1]='C'; 
+  tx1(); tx2(); tx3();
+  delay(2500);
+  Forward(0,0);
+ 
+  Left(25,25);
+  txData[1]='D'; 
+  tx1(); tx2(); tx3();
+  delay(2500);
+  Forward(0,0);
+}
+
+void tx1()
+{
+  Radio.transmit(0x02, txData, 3);
+  while (Radio.busy());
+   delay(50);
+}
+void tx2()
+{
+  Radio.transmit(0x03, txData, 3);
+  while (Radio.busy());
+   delay(50);
+}
+void tx3()
+{
+  Radio.transmit(0x04, txData, 3);
+  while (Radio.busy());
+   delay(50);
+}
+
+
+void Forward(int i,int j) // First Argument is PWM for Right and Second 
+                          //Argument is PWM for Left
+{
+ digitalWrite(55,HIGH);   //SLP R
+ digitalWrite(54,LOW);    // DIR R
+  
+ digitalWrite(71,HIGH);   //SLP L
+ digitalWrite(70,LOW);    //DIR L
+  
+ analogWrite(31,j);       // PWM L
+ analogWrite(32,i);       //PWM R
+}
+
+void Right(int i,int j)
+{
+ digitalWrite(55,HIGH);   //SLP R
+ digitalWrite(54,HIGH);   // DIR R
+  
+ digitalWrite(71,HIGH);   //SLP L
+ digitalWrite(70,LOW);    //DIR L
+  
+ analogWrite(31,j);       // PWM L
+ analogWrite(32,i);       //PWM R
+}
+
+void Reverse(int i,int j)  
+{
+  digitalWrite(55,HIGH);   //SLP R
+  digitalWrite(54,HIGH);   // DIR R
+  
+  digitalWrite(71,HIGH);   //SLP L
+  digitalWrite(70,HIGH);   //DIR L
+  
+  analogWrite(31,j);       // PWM L
+  analogWrite(32,i);       //PWM R
+}
+
+void Left(int i,int j)  
+{
+  digitalWrite(55,HIGH);  //SLP R
+  digitalWrite(54,LOW);   // DIR R
+  
+  digitalWrite(71,HIGH);   //SLP L
+  digitalWrite(70,HIGH);   //DIR L
+  
+  analogWrite(31,j);       // PWM L
+  analogWrite(32,i);       //PWM R
+}

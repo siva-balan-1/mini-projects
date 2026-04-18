@@ -1,0 +1,78 @@
+void forward(int x,int y)
+{
+  digitalWrite(55,HIGH);
+  digitalWrite(54,LOW);
+  digitalWrite(71,HIGH);
+  digitalWrite(70,LOW);
+  analogWrite(31,x);
+  analogWrite(32,y);
+ }
+ void reverse(int x,int y)
+{
+  digitalWrite(55,HIGH);
+  digitalWrite(54,HIGH);
+  digitalWrite(71,HIGH);
+  digitalWrite(70,HIGH);
+  analogWrite(31,x);
+  analogWrite(32,y);
+}
+void right(int x,int y)
+{
+  digitalWrite(55,HIGH);
+  digitalWrite(54,HIGH);
+  digitalWrite(71,HIGH);
+  digitalWrite(70,LOW);
+  analogWrite(31,x);
+  analogWrite(32,y);
+  
+}
+void left(int x,int y)
+{
+  digitalWrite(55,HIGH);
+  digitalWrite(54,LOW);
+  digitalWrite(71,HIGH);
+  digitalWrite(70,HIGH);
+  analogWrite(31,x);
+  analogWrite(32,y);
+  
+}
+void setup() {
+  pinMode(42,INPUT_PULLUP);
+  pinMode(59,INPUT_PULLUP);
+  pinMode(45,INPUT_PULLUP);
+  pinMode(62,INPUT_PULLUP);
+  pinMode(49,INPUT_PULLUP);
+  pinMode(66,INPUT_PULLUP);
+  
+}
+
+void loop() {
+ int bs1=digitalRead(42);
+ int bs2=digitalRead(59);
+ int bs3=digitalRead(45);
+ int bs4=digitalRead(62);
+ int bs5=digitalRead(49);
+ int bs6=digitalRead(66);
+if( bs3==0&&bs4==0||bs2==0||bs1==0||bs3==0)
+ {
+  reverse(50,50);
+  delay(1000);
+  right(50,0);
+  delay(1500);
+ }
+ else if(bs5==0||bs6==0||bs4==0)
+ {
+  reverse(50,50);
+  delay(1000);
+  left (0,50);
+  delay(1500);
+ }
+  else
+ {
+  forward(70,70);
+   
+ }
+ 
+ 
+ 
+}

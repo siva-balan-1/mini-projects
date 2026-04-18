@@ -1,0 +1,28 @@
+#include <SPI.h>
+#include <AIR430BoostETSI.h>
+#define IDENTITY 0x02
+unsigned char rxData[6] = { '0', '0', '0', '0', '0', '\0' };
+
+
+void setup() 
+{
+  Serial.begin(115200);//Serial  services are initialized here
+  
+  }
+
+void loop() 
+{
+  
+   Radio.begin(IDENTITY, CHANNEL_1, POWER_MAX);
+    if (Radio.receiverOn(rxData, sizeof(rxData), 1000) > 0)
+      {
+         Serial.print("Data From Node :");Serial.print(rxData[0]); Serial.print("  IS  : ");Serial.println(rxData[1]);
+         Serial.print("Data From Node :");Serial.print(rxData[0]); Serial.print("  IS  : ");Serial.println(rxData[2]);
+         Serial.print("Data From Node :");Serial.print(rxData[0]); Serial.print("  IS  : ");Serial.println(rxData[3]);
+         Serial.print("Data From Node :");Serial.print(rxData[0]); Serial.print("  IS  : ");Serial.println(rxData[4]);
+         delay(1000);
+       }
+    Radio.end();
+    
+}
+

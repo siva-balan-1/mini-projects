@@ -1,0 +1,20 @@
+void setup()
+{
+pinMode(2,INPUT);
+Serial.begin(9600);
+pinMode(77,OUTPUT);
+pinMode(75,OUTPUT);
+pinMode(76,OUTPUT);
+}
+
+void loop()
+{
+int a=analogRead(2);int b=map(a,0,4095,0,255);analogWrite(77,b);
+if(a<150)
+{digitalWrite(76,HIGH);Serial.println("Value within Limit");}
+else if (a>150)
+{digitalWrite(75,HIGH);Serial.println("Value out of Limit");
+while (digitalRead(73) !=0){serial.println("Waiting for reset");
+delay(300);
+
+}}}

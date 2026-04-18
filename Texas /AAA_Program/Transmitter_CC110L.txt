@@ -1,0 +1,48 @@
+/* Change the IDENTITY TO Each of the individual Nodes */
+/*depending on board the analog Pin can also be changed*/
+
+#include <SPI.h>
+#include <AIR430BoostETSI.h>
+#define IDENTITY 0x01// indicates node address
+unsigned char txData[6] = { IDENTITY,'0','0','0','0', '\0' };
+void printTxData()
+{
+  Serial.print("TX (DATA): ");
+  Serial.println((char*)txData); 
+}
+
+void setup()
+{
+
+pinMode(24,INPUT);//Sensor1
+pinMode(6,INPUT);//Sensor2
+pinMode(2,INPUT);//Sensor3
+pinMode(23,INPUT);//Sensor4
+
+Serial.begin(9600);
+Radio.begin(IDENTITY, CHANNEL_1, POWER_MAX);
+delay(500);
+}
+
+void loop()
+{
+  
+  delay(1000);
+  int a=analogRead(24);a=map(a,0,4095,0,255);txData[1]=a;
+  int b=analogRead(6);b=map(b,0,4095,0,255);txData[2]=b;
+  int c=analogRead(2);c=map(c,0,4095,0,255);txData[3]=c;
+  int d=analogRead(23);d=map(d,0,4095,0,255);txData[4]=d;
+  Radio.transmit(0x02, txData,6);
+  Serial.print(" Node Number  :");
+  Serial.print(txData[0]);
+  Serial.println(" Sends a Data :");
+  Serial.print(" SENSOR DATA1 :  ");
+  Serial.println(txData[1]);
+  Serial.print(" SENSOR DATA2 :  ");
+  Serial.println(txData[2]);
+  Serial.print(" SENSOR DATA3 :  ");
+  Serial.println(txData[3]);
+  Serial.print(" SENSOR DATA4 :  ");
+  Serial.println(txData[4]);
+  delay(1000); //node sends data in every 1 sec
+ }

@@ -1,0 +1,210 @@
+//RSLK MOTOR TESTING NEW CONNECTIONS //
+
+void setup()
+{
+
+  /* Motor Pin Initialization */
+pinMode(54,OUTPUT);
+pinMode(70,OUTPUT);
+pinMode(32,OUTPUT);
+pinMode(31,OUTPUT);
+pinMode(55,OUTPUT);
+pinMode(71,OUTPUT);
+
+}
+
+void loop()
+{
+
+Forward(100,100); //Both Wheels moving Forward
+delay(5000);
+Reverse(100,100); //Both Wheels moving Reverse
+delay(5000);
+
+}
+
+
+
+void Reverse(int i,int j)  // First Argument is PWM for Right and Second 
+                            //Argument is PWM for Left
+{
+digitalWrite(55,HIGH);//SLP R
+digitalWrite(54,HIGH); // DIR R
+
+digitalWrite(71,HIGH);//SLP L
+digitalWrite(70,HIGH); //DIR L
+
+analogWrite(31,j); // PWM L
+analogWrite(32,i); //PWM R
+}
+
+void Forward(int i,int j) // First Argument is PWM for Right and Second 
+                          //Argument is PWM for Left
+{
+digitalWrite(55,HIGH);//SLP R
+digitalWrite(54,LOW); // DIR R
+
+digitalWrite(71,HIGH);//SLP L
+digitalWrite(70,LOW); //DIR L
+
+analogWrite(31,j); // PWM L
+analogWrite(32,i); //PWM R
+}
+
+Note: To move the Robot in Forward Left Direction an API like Forward (50,0); will work making the right motor to turn and left to stop resulting in a forward left direction movement and vice versa.
+
+Exp 7: Write a code to make the Robot follow ablack tape line and the robot should stop when the sensor detects a completely white surface beneath it.
+//RSLK New Line Follower  //
+
+ int sensor_value=0;
+
+  int k=0;
+  int a=0;int b=0;int c=0;int d=0;
+  int e=0;int f=0;int g=0;int h=0;
+  int bs1,bs2,bs3,bs4,bs5,bs6;
+
+
+void setup()
+{
+  /* WHITE LED TESTING */
+pinMode(75,OUTPUT);
+pinMode(76,OUTPUT);
+pinMode(77,OUTPUT);
+
+digitalWrite(75,HIGH);
+digitalWrite(76,HIGH);
+digitalWrite(77,HIGH);
+delay(1000);
+digitalWrite(75,LOW);
+digitalWrite(76,LOW);
+digitalWrite(77,LOW);
+delay(1000);
+  /*White LED Testing Complete*/
+
+  /* MOTOR CONNECTION INITIALIZATION*/
+pinMode(54,OUTPUT); //DIR R
+pinMode(70,OUTPUT); //DIR L
+pinMode(32,OUTPUT); //PWM R
+pinMode(31,OUTPUT); //PWM L
+pinMode(55,OUTPUT); //nSLP R
+pinMode(71,OUTPUT); //nSLP L
+  /* Motor initialization complete*/
+
+
+  /* BUMP SWITCH INITIALIZATION */
+
+pinMode(42,INPUT_PULLUP);
+pinMode(59,INPUT_PULLUP);
+pinMode(45,INPUT_PULLUP);
+pinMode(62,INPUT_PULLUP);
+pinMode(49,INPUT_PULLUP);
+pinMode(66,INPUT_PULLUP);
+  /* Bump Switch Initialization Complete*/
+
+
+  /* PIN 5.3 For QTR. Make it as Output*/
+pinMode(61,OUTPUT);
+Serial.begin(9600);
+
+
+
+
+}
+
+void loop()
+{
+digitalWrite(61,HIGH);
+  pinMode(65,OUTPUT);pinMode(48,OUTPUT);pinMode(64,OUTPUT);pinMode(47,OUTPUT);
+  pinMode(52,OUTPUT);pinMode(68,OUTPUT);pinMode(53,OUTPUT);pinMode(69,OUTPUT);
+
+  digitalWrite(65,HIGH);digitalWrite(48,HIGH);digitalWrite(64,HIGH);digitalWrite(47,HIGH);
+  digitalWrite(52,HIGH);digitalWrite(68,HIGH);digitalWrite(53,HIGH);digitalWrite(69,HIGH);
+
+delayMicroseconds(30);
+
+  pinMode(65,INPUT_PULLUP);pinMode(48,INPUT_PULLUP);pinMode(64,INPUT_PULLUP);pinMode(47,INPUT_PULLUP);
+  pinMode(52,INPUT_PULLUP);pinMode(68,INPUT_PULLUP);pinMode(53,INPUT_PULLUP);pinMode(69,INPUT_PULLUP);
+
+
+   for(k=0;k<10000;k++)
+   {
+     a=digitalRead(65);b=digitalRead(48);c=digitalRead(64);d=digitalRead(47);
+     e=digitalRead(52);f=digitalRead(68);g=digitalRead(53);h=digitalRead(69);
+   }
+   Serial.print(h);Serial.print(g);Serial.print(f);Serial.print(e);Serial.print(d);Serial.print(c);Serial.print(b);Serial.print(a); Serial.print("    ");
+    int sensorvalue=(h*128)+(g*64)+(f*32)+(e*16)+(d*8)+(c*4)+(b*2)+(a*1);
+
+if(sensorvalue<=7 &&sensorvalue>0)
+    {
+Serial.println("Move Right");
+Forward(0,20); 
+
+    }
+
+    if(sensorvalue>7 &&sensorvalue<=32)
+    {
+Serial.println(" Move Forward"); 
+Forward(20,20);
+    }
+
+    if(sensorvalue>31 &&sensorvalue<255)
+    {
+Serial.println("Move Left");
+Forward(20,0);
+    }
+if(sensorvalue ==0 || sensorvalue==255)
+    {
+Serial.println("STOP"); 
+Forward(0,0);
+    }
+
+
+digitalWrite(61,LOW);
+delay(10);
+   /* Reading Bump switches*/
+  bs1=digitalRead(42);
+  bs2=digitalRead(59);
+  bs3=digitalRead(45);
+  bs4=digitalRead(62);
+  bs5=digitalRead(49);
+  bs6=digitalRead(66);
+if(bs1==0 || bs2==0 ||bs3==0 ||bs4==0 ||bs5==0 ||bs6==0)
+  {
+Serial.print(" BUMP Activated..Moving back few steps");
+
+for(int m=0;m<=50000;m++)
+  {
+Reverse(20,20);
+  } 
+
+
+
+}
+}
+
+
+void Reverse(int i,int j)  // First Argument is PWM for Right and Second Argument is PWM for Left
+{
+digitalWrite(55,HIGH);//SLP R
+digitalWrite(54,HIGH); // DIR R
+
+digitalWrite(71,HIGH);//SLP L
+digitalWrite(70,HIGH); //DIR L
+
+analogWrite(31,j); // PWM L
+analogWrite(32,i); //PWM R
+}
+
+void Forward(int i,int j) // First Argument is PWM for Right and Second Argument is PWM for Left
+{
+digitalWrite(55,HIGH);//SLP R
+digitalWrite(54,LOW); // DIR R
+
+digitalWrite(71,HIGH);//SLP L
+digitalWrite(70,LOW); //DIR L
+
+analogWrite(31,j); // PWM L
+analogWrite(32,i); //PWM R
+}
+
+
